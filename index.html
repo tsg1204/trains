@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Anytime is Train Time</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="css/reset.css">
+ <link rel="stylesheet" type="text/css" href="https://bootswatch.com/yeti/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+<div class="container">
+	<div class="jumbotron text-center">
+		<h1>Anytime is Train Time</h1>
+		<p>Choo Choo. Chee Chee.</p>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Current Train Schedule</h3>
+			    </div>
+
+			    <div class="panel-body">
+				    <div id="empTable">
+		  			<!-- Employ Data will be here -->
+		  				<table class="table table-striped">
+		  					<thead>
+		  						<th>Train Name</th>
+		  						<th>Destination</th>
+		  						<th>Frequency (min)</th>
+		  						<th>Next Arrival</th>
+		  						<th>Minutes Away</th>
+		  					</thead>
+		  					<tbody>
+		  					</tbody>
+		  				</table>
+		  			</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+	<!-- Employee Form -->
+
+	<div class="row">
+		<div class="col-md-12">
+
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Add Train</h3>
+			    </div>
+
+			    <div class="panel-body">
+					<form id="empform">
+					    <div class="form-group">
+						    <label for="train-name">Train Name</label>
+						    <input type="text" id="train-name" name="train-name" value="" class="form-control">
+					    </div>
+					    <div class="form-group">
+						    <label for="destination">Destination</label>
+						    <input type="text" id="destination" name="destination" value="" class="form-control">
+					    </div>
+					    <div class="form-group">
+						    <label for="first-time">First Train Time (HH:mm - military time)</label>
+						    <input type="text" id="first-time" name="first-time" value="" placeholder="HH:MM" class="form-control">
+					    </div>
+					    <div class="form-group">
+						    <label for="frequency">Frequency (min)</label>
+						    <input type="number" id="frequency" name="frequency" value="" class="form-control">
+					    </div>
+					    <div class="form-group">
+
+					    <input type="submit" id="submit" class="btn btn-primary" value="Submit">
+					    </div>
+		  			</form>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
+<script src="http://momentjs.com/downloads/moment.min.js"></script>
+<script>
+// Initialize Firebase
+var config = {
+	apiKey: "AIzaSyCmA72FnaCmZPdGePBM926_Hf1sjU8i3g0",
+	authDomain: "week7-3dcca.firebaseapp.com",
+	databaseURL: "https://week7-3dcca.firebaseio.com",
+	storageBucket: "week7-3dcca.appspot.com",
+};
+
+firebase.initializeApp(config);
+
+var database = firebase.database();
+var name = "";
+var destination = "";
+var firstTime = "";
+var frequency = "";
+var nextArrival = "";
+var minAway = "";
+
+function convertTime(newformat) { 
+	var d = new Date(moment() + newformat); 
+	
+	return d.getHours() + ':' + d.getMinutes(); 
+
+}
+
+$('#submit').on('click', function(event) {
+	event.preventDefault();
+
+	name = $('#train-name').val().trim();
+	destination = $('#destination').val();
+	firstTime = $('#first-time').val();
+	frequency = $('#frequency').val();
+
+	database.ref().push({
+		name: name,
+		destination: destination,
+		firstTime: firstTime,
+		frequency: frequency,
+		nextArrival: nextArrival,
+		minAway: minAway
+	})
+
+	$('.form-control').val('');
+})
+
+database.ref().on('child_added', function(childSnapshot) {
+	name = childSnapshot.val().name;
+	destination = childSnapshot.val().destination;
+	firstTime = childSnapshot.val().firstTime;
+	frequency = childSnapshot.val().frequency;
+	nextArrival = moment(convertTime(firstTime)).add(frequency, 'minutes');
+	minAway = moment(moment.duration(nextArrival.diff(moment())));
+
+	//Create tr for every employee
+	var schedule_tr = $('<tr>');
+
+	//Create td for employee data
+	var name_td = $('<td>');
+	var destination_td = $('<td>');
+	var frequency_td = $('<td>');
+	var nextArrival_td = $('<td>');
+	var minAway_td = $('<td>');
+
+	//Add data to td
+	name_td.text(name);
+	destination_td.text(destination);
+	frequency_td.text(frequency);
+	//need to be converted to 12 hour format
+	nextArrival_td.text(nextArrival);
+	minAway_td.text(minAway);
+
+	//Append td to employee_tr
+	schedule_tr.append(name_td);
+	schedule_tr.append(destination_td);
+	schedule_tr.append(frequency_td);
+	schedule_tr.append(nextArrival_td);
+	schedule_tr.append(minAway_td);
+
+	$('tbody').append(schedule_tr);
+});
+
+</script>
+    
+
+</body>
+</html>
