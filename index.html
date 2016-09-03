@@ -4,7 +4,7 @@
 	<title>Anytime is Train Time</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="css/reset.css">
- <link rel="stylesheet" type="text/css" href="https://bootswatch.com/yeti/bootstrap.min.css">
+ <link rel="stylesheet" type="text/css" href="https://bootswatch.com/superhero/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
@@ -87,89 +87,7 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
 <script src="http://momentjs.com/downloads/moment.min.js"></script>
-<script>
-// Initialize Firebase
-var config = {
-	apiKey: "AIzaSyCmA72FnaCmZPdGePBM926_Hf1sjU8i3g0",
-	authDomain: "week7-3dcca.firebaseapp.com",
-	databaseURL: "https://week7-3dcca.firebaseio.com",
-	storageBucket: "week7-3dcca.appspot.com",
-};
-
-firebase.initializeApp(config);
-
-var database = firebase.database();
-var name = "";
-var destination = "";
-var firstTime = "";
-var frequency = "";
-var nextArrival = "";
-var minAway = "";
-
-function convertTime(newformat) { 
-	var d = new Date(moment() + newformat); 
-	
-	return d.getHours() + ':' + d.getMinutes(); 
-
-}
-
-$('#submit').on('click', function(event) {
-	event.preventDefault();
-
-	name = $('#train-name').val().trim();
-	destination = $('#destination').val();
-	firstTime = $('#first-time').val();
-	frequency = $('#frequency').val();
-
-	database.ref().push({
-		name: name,
-		destination: destination,
-		firstTime: firstTime,
-		frequency: frequency,
-		nextArrival: nextArrival,
-		minAway: minAway
-	})
-
-	$('.form-control').val('');
-})
-
-database.ref().on('child_added', function(childSnapshot) {
-	name = childSnapshot.val().name;
-	destination = childSnapshot.val().destination;
-	firstTime = childSnapshot.val().firstTime;
-	frequency = childSnapshot.val().frequency;
-	nextArrival = moment(convertTime(firstTime)).add(frequency, 'minutes');
-	minAway = moment(moment.duration(nextArrival.diff(moment())));
-
-	//Create tr for every employee
-	var schedule_tr = $('<tr>');
-
-	//Create td for employee data
-	var name_td = $('<td>');
-	var destination_td = $('<td>');
-	var frequency_td = $('<td>');
-	var nextArrival_td = $('<td>');
-	var minAway_td = $('<td>');
-
-	//Add data to td
-	name_td.text(name);
-	destination_td.text(destination);
-	frequency_td.text(frequency);
-	//need to be converted to 12 hour format
-	nextArrival_td.text(nextArrival);
-	minAway_td.text(minAway);
-
-	//Append td to employee_tr
-	schedule_tr.append(name_td);
-	schedule_tr.append(destination_td);
-	schedule_tr.append(frequency_td);
-	schedule_tr.append(nextArrival_td);
-	schedule_tr.append(minAway_td);
-
-	$('tbody').append(schedule_tr);
-});
-
-</script>
+<script src="js/train.js"></script>
     
 
 </body>

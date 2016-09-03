@@ -1,86 +1,22 @@
 /*@import "font-awesome";*/
-body {
-	color:#3973ac;
-	font-size: 18px;
-	line-height: 34px;	
-	background-color: #ddd;
-}
-* {
-	box-sizing: border-box;
-}
+
 .container {
 	width: 100%;
 	max-width: 960px;
 	margin: 0 auto;
 	clear: both;
 }
-h1, 
-h2,
-h3,
-p {
-	margin-bottom: 20px;
-}
-p:last-child {
-	margin-bottom: 0;
-}
-h1, h2, h3 {
-	font-weight: 700;
-	color: #3973ac;
-}
-h1 {
-	font-size: 30px;
-	line-height: 49px;
-	border-bottom: 3px solid #3973ac;
-	padding-bottom: 20px;
-	text-align: center;
-}
-h2,
-h3 {
-	font-size: 22px;
-}
 /* Main Container **********************/
 main {
 	padding-top: 130px;
 }
 
-.main-section {
-	background-image: url('../images/question.gif');
-	background-repeat: no-repeat;
-	background-position: center;
-	padding: 100px;
-	margin: auto;
-	width: 100%;
-	border: 1px solid #ddd;
-	text-align: justify;
+.jumbotron{
+	background-image: url("../images/train-station1.jpg");
+	background-size: cover;
+}
+.jumbotron h1 {
+	font-color: #fff;
 }
 
-.btnTopic {
-	margin: 10px 10px 10px 0px;
 
-}
-#addTopic{
-	margin: 10px 10px 10px 20px;
-}
-
-.topicImg {
-	margin: 0px 5px 10px 0px;
-	width: 90%;
-}
-#rating-txt {
-	font-size: 12px;
-}
-/* Footer **************************/    
-footer {
-	background: #666;
-	color: #3973ac;
-	padding: 30px 0;
-	clear: both;
-	border-top: 8px solid #3973ac;
-	color: #ccc;
-	font-size: 12px;
-	text-align: center;
-}
-
-#copywrite {
-	color: #d9d9d9;
-}
